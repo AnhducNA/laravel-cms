@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('tags', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('slug')->unique();
-            $table->bigInteger('user_id')->unsigned()->comment('creator');
+            $table->string('slug')->unique()->index();
+            $table->bigInteger('user_id')->unsigned()->comment('creator')->index();
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users');
         });

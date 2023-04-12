@@ -9,7 +9,7 @@ class Post extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['id', 'title', 'slug', 'description', 'thumbnail','category_id', 'user_id', 'tag_id', 'created_at', 'updated_at'];
+    protected $fillable = ['id', 'title', 'slug', 'description','status', 'category_id', 'user_id', 'thumbnail', 'created_at', 'updated_at'];
     protected $table = 'posts';
     protected $primaryKey = 'id';
 
@@ -23,8 +23,8 @@ class Post extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    function tag()
+    function tags()
     {
-        return $this->belongsTo(Tag::class, 'tag_id');
+        return $this->belongsToMany(Tag::class);
     }
 }

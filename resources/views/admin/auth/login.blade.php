@@ -10,7 +10,6 @@
             <div class="card-content">
                 <form method="post" action="{{ route('admin.login') }}">
                     @csrf
-
                     <div class="field spaced">
                         <label class="label">Email</label>
                         <div class="control icons-left">
@@ -41,7 +40,9 @@
                             </label>
                         </div>
                     </div>
-
+                    @if(!empty($type_login))
+                        <input type="hidden" name="type_login" value="{{$type_login}}">
+                    @endif
                     <hr>
 
                     <div class="field grouped">

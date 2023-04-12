@@ -25,9 +25,9 @@ class PostFactory extends Factory
             'title' => $title,
             'slug' => Str::slug($title),
             'description' => fake()->text(300),
+            'status'=> "DRAFT",
             'category_id' => rand(1,3),
             'user_id' => rand(1, 3),
-            'tag_id'=>rand(1,3),
             'thumbnail' => fake()->imageUrl(540, 480, 'animals', true),
             'created_at'=>$now
         ];

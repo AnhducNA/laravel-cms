@@ -25,11 +25,14 @@
 
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-130795909-1"></script>
-
+    <!-- Datatables -->
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script>
+    <!-- select2 cdn-->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
     <!-- Fonts -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap">
-    <!-- Styles -->
-    @livewireStyles
+
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
@@ -86,19 +89,52 @@
             </div>
         </div>
     </footer>
+    <div class="modal" id="delete-modal">
+        <div class="modal-background --jb-modal-close"></div>
+        <div class="modal-card">
+            <header class="modal-card-head">
+                <p class="modal-card-title">Delete modal</p>
+            </header>
+            <section class="modal-card-body">
+                <p>Do you want to delete: <b>item</b> ?</p>
+            </section>
+            <footer class="modal-card-foot">
+                <button class="button --jb-modal-close">Cancel</button>
+                <a class="button-confirm-delete button red --jb-modal-close" href="javascript:">Confirm</a>
+            </footer>
+        </div>
+    </div>
 </div>
 
 
 <!-- Scripts below are for demo only -->
-<script src="{{asset('assets/admin/js/main.min.js')}}" type="text/javascript"></script>
+<!-- jquery -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js" type="text/javascript"></script>
+
+<!-- cdn select2 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.full.min.js" type="text/javascript"></script>
+
+<!-- cdn ckeditor -->
+<script src="//cdn.ckeditor.com/4.14.1/standard/ckeditor.js"></script>
+
+<script src="{{asset('assets/admin/js/admin_post.js')}}" type="text/javascript"></script>
+<script src="{{asset('assets/admin/js/main.js')}}" type="text/javascript"></script>
 
 <script type="text/javascript">
-    function all_check(source){
+    <!-- input onclick="all_check(this)" -->
+    function all_check(source) {
         checkboxes = document.getElementsByClassName('element_check');
-        for(var i=0, n=checkboxes.length;i<n;i++) {
+        for (var i = 0, n = checkboxes.length; i < n; i++) {
             checkboxes[i].checked = source.checked;
         }
     }
+</script>
+<script>
+    <!-- cdn ckeditor -->
+    $(document).ready(function (){
+        $('.ckeditor').ckeditor();
+    })
 </script>
 <script>
     !function (f, b, e, v, n, t, s) {
@@ -123,6 +159,5 @@
     fbq('track', 'PageView');
 </script>
 
-@livewireScripts
 </body>
 </html>

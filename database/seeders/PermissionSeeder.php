@@ -35,7 +35,7 @@ class PermissionSeeder extends Seeder
         Role::findByName('category_admin')->givePermissionTo('manage_category');
         Role::findByName('tag_admin')->givePermissionTo('manage_tag');
 
-        User::find(1)->assignRole('user_admin');
+        User::find(1)->assignRole('admin');
 
     }
 }

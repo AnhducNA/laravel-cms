@@ -52,7 +52,6 @@
                                 <span class="check"></span>
                             </label>
                         </th>
-                        <th class="image-cell"></th>
                         <th>Title</th>
                         <th>Creator</th>
                         <th>Created at</th>
@@ -69,12 +68,6 @@
                                         <input type="checkbox" class="element_check">
                                         <span class="check"></span>
                                     </label>
-                                </td>
-                                <td class="image-cell">
-                                    <div class="image">
-                                        <img class="rounded-full"
-                                             src="https://avatars.dicebear.com/v2/initials/{{$category['name']}}.svg">
-                                    </div>
                                 </td>
                                 <td data-label="Name">{{$category['name']}}</td>
                                 <td data-label="Role">{{!empty($category->users['name']) ? $category->users['name'] : ''}}</td>

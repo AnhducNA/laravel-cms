@@ -13,17 +13,17 @@ return new class extends Migration
     {
         Schema::create('posts', function (Blueprint $table) {
             $table->id();
-            $table->string('title', 255);
-            $table->string('slug', 255);
+            $table->string('title');
+            $table->string('slug')->index();
+            $table->text('excerpt')->nullable();
             $table->text('description')->nullable();
-            $table->unsignedBigInteger('category_id')->nullable();
-            $table->unsignedBigInteger('user_id')->nullable();
-            $table->unsignedBigInteger('tag_id')->nullable();
-            $table->string('thumbnail', 255)->nullable();
+            $table->string('status')->nullable();
+            $table->unsignedBigInteger('category_id')->nullable()->index();
+            $table->unsignedBigInteger('user_id')->nullable()->index();
+            $table->string('thumbnail')->nullable();
             $table->timestamps();
             $table->foreign('category_id')->references('id')->on('categories');
             $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('tag_id')->references('id')->on('tags');
         });
     }
 

@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 class CategoryController extends Controller
@@ -42,8 +43,9 @@ class CategoryController extends Controller
     {
         $data = $request->validate([
             'name' => ['required'],
-            'user_id' => ['required']
         ]);
+        $data['user_id'] = Auth::id();
+
         $data['slug'] = Str::slug($data['name']);
         $data['created_at'] = Carbon::now()->toDateTimeString();
         $category = Category::create($data);
@@ -68,8 +70,8 @@ class CategoryController extends Controller
     {
         $data = $request->validate([
             'name' => ['required'],
-            'user_id' => ['required']
         ]);
+        $data['user_id'] = Auth::id();
         $data['slug'] = Str::slug($data['name']);
         $data['updated_at'] = Carbon::now()->toDateTimeString();
         $category = Category::find($id)->update($data);
@@ -83,5 +85,21 @@ class CategoryController extends Controller
     {
         Category::find($id)->delete();
         return redirect(route('category.index'))->with('success', __('Category deleted successfully.'));
+    }
+
+    function find_select2(Request $request){
+        $term = $request->q;
+        if (empty($term)) {
+            return \Response::json([]);
+        }
+
+        $list_categories = Category::where('name', 'LIKE', "%".$term."%")->limit(5)->get();
+        $formatted_categories = [];
+
+        foreach ($list_categories as $category) {
+            $formatted_categories[] = ['id' => $category->id, 'text' => $category->name];
+        }
+
+        return \Response::json($formatted_categories);
     }
 }

@@ -80,4 +80,20 @@ class TagController extends Controller
         Tag::find($id)->delete();
         return redirect(route('tag.index'))->with('success', __('Tag deleted successfully.'));
     }
+    public function find_select2(Request $request)
+    {
+        $term = trim($request->q);
+        if (empty($term)) {
+            return \Response::json([]);
+        }
+
+        $tags = Tag::where('name', 'LIKE', "%".$term."%")->limit(5)->get();
+        $formatted_tags = [];
+
+        foreach ($tags as $tag) {
+            $formatted_tags[] = ['id' => $tag->id, 'text' => $tag->name];
+        }
+
+        return \Response::json($formatted_tags);
+    }
 }

@@ -22,14 +22,21 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        if($request->get('search_option')){
-            $list_users = User::where($request->get('search_option'), 'LIKE', "%".$request->get('search_value')."%")->paginate(3);
-        }else{
+        $name_role = "";
+        if ($request->get('search_option')) {
+            $list_users = User::where($request->get('search_option'), 'LIKE', "%" . $request->get('search_value') . "%")->paginate(3);
+        } elseif ($request->get('name_role')) {
+            $list_users = User::with('roles')->paginate(3);
+            $name_role = $request->get('name_role');
+        } elseif ($request->get('email')) {
+            $list_users = User::where('email', 'LIKE', "%" . $request->get('email') . "%")->paginate(3);
+        } else {
             $list_users = User::paginate(3);
         }
-//        dd($list_users);
+        $list_role_attribute = Role::distinct('name')->pluck('name');
+        $list_email_attribute = User::distinct('email')->pluck('email');
         $list_attribute = (new User())->getFillable();
-        return view('admin.user.list', compact('list_users', 'list_attribute'));
+        return view('admin.user.list', compact('list_users', 'name_role', 'list_attribute', 'list_role_attribute', 'list_email_attribute'));
     }
 
     /**
@@ -116,5 +123,19 @@ class UserController extends Controller
     {
         User::find($id)->delete();
         return redirect()->route('user.index')->with('success', 'User deleted successfully');
+    }
+    function find_select2(Request $request){
+        $term = $request->q;
+        if (empty($term)) {
+            return \Response::json([]);
+        }
+        $list_users = User::where('name', 'LIKE', "%".$term."%")->limit(5)->get();
+        $formatted_users = [];
+
+        foreach ($list_users as $user) {
+            $formatted_users[] = ['id' => $user->id, 'text' => $user->name];
+        }
+
+        return \Response::json($formatted_users);
     }
 }

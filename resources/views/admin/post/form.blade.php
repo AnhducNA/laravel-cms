@@ -22,7 +22,7 @@
             </header>
             <div class="card-content">
                 <?php $action = (!empty($post)) ? route('post.update', $post['id']) : route('post.store') ?>
-                <form method="post" action="{{$action}}">
+                <form method="post" action="{{$action}}" enctype="multipart/form-data">
                     @csrf
                     <div class="field">
                         <label class="label" for="title">Title</label>
@@ -31,6 +31,9 @@
                             <input class="input" type="text" name="title" id="title" placeholder="Title" autofocus
                                    value="<?php echo ($post) ? $post['title'] : '' ?>">
                         </div>
+                        @error('title')
+                        <b style="color: red">{{$message}}</b>
+                        @enderror
                     </div>
 
                     <input class="input" type="hidden" name="slug">
@@ -38,12 +41,19 @@
                     <div class="field">
                         <label class="label" for="description">Description</label>
                         <div class="control">
-                            <textarea class="textarea" name="description" id="description"
-                                      placeholder="Description"><?php echo ($post) ? $post['description'] : '' ?></textarea>
+                            <textarea class="textarea ckeditor" name="description" id="description"
+                                      placeholder="Description">
+                                @if(!empty($post))
+                                        <?php echo ($post) ? $post['description'] : '' ?>
+                                @endif
+                            </textarea>
                         </div>
+                        @error('description')
+                        <b style="color: red">{{$message}}</b>
+                        @enderror
                     </div>
                     <div class="field">
-                        <label class="label  icons-left" for="thumbnail">
+                        <label class="label icons-left" for="thumbnail">
                             <span class="icon left"><i class="mdi mdi-image-area"></i></span>
                             Thumbnail</label>
                         <div class="field-body">
@@ -52,61 +62,65 @@
                                     <a class="button blue">
                                         Upload
                                     </a>
-                                    <input class="input" type="file" name="thumbnail" id="thumbnail">
+                                    <input class="input" type="file" name="thumbnail" id="thumbnail" value="">
                                 </label>
                             </div>
                         </div>
                     </div>
                     <div class="field">
-                        <label class="label" for="category">Category</label>
+                        <label class="label" for="list_category_select2">Category</label>
                         <div class="control">
                             <div class="select">
-                                <select id="category" name="category_id">
-                                    <option value="">Select Category</option>
-                                    @foreach($list_categories as $category)
-                                        @if(!empty($post->category) && $post->category['name'] == $category['name'])
-                                            <option value="{{$category['id']}}" selected>{{$category['name']}}</option>
-                                        @else
-                                            <option value="{{$category['id']}}">{{$category['name']}}</option>
-                                        @endif
-                                    @endforeach
+                                <select id="list_category_select2" name="category_id" class="form-control js-select2">
+                                    @if(!empty($post->category))
+                                        <option value="{{$post->category['id']}}"
+                                                selected>{{$post->category['name']}}</option>
+                                    @endif
+                                </select>
+                            </div>
+                        </div>
+                        @error('category_id')
+                        <b style="color: red">{{$message}}</b>
+                        @enderror
+                    </div>
+                    <div class="field">
+                        <label class="label" for="list_tags_select2">Assign Tag
+                            <button class="button">Add tag</button>
+                        </label>
+                        <div class="control">
+                            <div class="select">
+                                <select id="list_tags_select2" name="list_id_tags[]" class="form-control js-select2" multiple>
+                                    @if(!empty($post->tags))
+                                        @foreach($post->tags as $tag)
+                                            <option
+                                                value="{{ $tag['id'] }}" <?php if (str_contains($list_name_tag_of_post, $tag['name'])) echo 'selected' ?>>{{$tag['name']}}</option>
+                                        @endforeach
+                                    @endif
                                 </select>
                             </div>
                         </div>
                     </div>
                     <div class="field">
-                        <label class="label" for="user">Creator</label>
+                        <label class="label" for="status">Status</label>
                         <div class="control">
                             <div class="select">
-                                <select id="user" name="user_id">
-                                    <option value="">Select User</option>
-                                    @foreach($list_users as $user)
-                                        @if(!empty($post->user) && $post->user['name'] == $user['name'])
-                                            <option value="{{$user['id']}}" selected>{{$user['name']}}</option>
-                                        @else
-                                            <option value="{{$user['id']}}">{{$user['name']}}</option>
-                                        @endif
-                                    @endforeach
+                                <select id="status" name="status" class="form-control">
+                                    @php
+                                        $published_selected = "";
+                                        $draft_selected = "";
+                                    if(!empty($post['status']) && $post['status'] == "PUBLISHED"){
+                                        $published_selected = "selected";
+                                    }elseif(!empty($post['status']) && $post['status'] == "DRAFT")
+                                        $draft_selected = "selected";
+                                    @endphp
+                                        <option value="PUBLISHED" {{$published_selected}}>PUBLISHED</option>
+                                        <option value="DRAFT" {{$draft_selected}}>DRAFT</option>
                                 </select>
                             </div>
                         </div>
-                    </div>
-                    <div class="field">
-                        <label class="label" for="tag">Tag</label>
-                        <div class="control">
-                            <div class="select">
-                                <select id="tag" name="tag_id">
-                                    <option value="">Select Tag</option>
-                                    @foreach($list_tags as $tag)
-                                        @if(!empty($post->tag) && $post->tag['name'] == $tag['name'])
-                                            <option value="{{$tag['id']}}" selected>{{$tag['name']}}</option>
-                                        @else
-                                            <option value="{{$tag['id']}}">{{$tag['name']}}</option>
-                                        @endif
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
+                        @error('category_id')
+                        <b style="color: red">{{$message}}</b>
+                        @enderror
                     </div>
                     <hr>
                     <div class="field grouped">

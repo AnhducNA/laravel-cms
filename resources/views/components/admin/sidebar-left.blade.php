@@ -17,7 +17,7 @@
         </ul>
         <p class="menu-label">Management</p>
         <ul class="menu-list">
-
+            @role('user_admin')
             <li class="--set-active-profile-html">
                 <a class="dropdown">
                     <span class="icon"><i class="mdi mdi-account-circle"></i></span>
@@ -42,6 +42,34 @@
                     </li>
                 </ul>
             </li>
+            @endrole
+            @role('admin')
+            <li class="--set-active-profile-html">
+                <a class="dropdown">
+                    <span class="icon"><i class="mdi mdi-account-circle"></i></span>
+                    <span class="menu-item-label">User</span>
+                    <span class="icon"><i class="mdi mdi-plus"></i></span>
+                </a>
+                <ul>
+                    <li>
+                        <a href="{{route('user.index')}}">
+                            <span>List user</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{route('permission.index')}}">
+                            <span>Permission</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{route('role.index')}}">
+                            <span>Role</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            @endrole
+            @role('article_admin')
             <li class="--set-active-tables-html">
                 <a class="dropdown">
                     <span class="icon"><i class="mdi mdi-newspaper"></i></span>
@@ -66,18 +94,49 @@
                     </li>
                 </ul>
             </li>
+            @endrole
+            @role('admin')
+            <li class="--set-active-tables-html">
+                <a class="dropdown">
+                    <span class="icon"><i class="mdi mdi-newspaper"></i></span>
+                    <span class="menu-item-label">Article</span>
+                    <span class="icon"><i class="mdi mdi-plus"></i></span>
+                </a>
+                <ul>
+                    <li>
+                        <a href="{{route('post.index')}}" >
+                            <span>Post</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" >
+                            <span>News</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" >
+                            <span>Video</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            @endrole
+            @role('admin')
             <li class="--set-active-tables-html">
                 <a href="{{route('category.index')}}">
                     <span class="icon"><i class="mdi mdi-view-list"></i></span>
                     <span class="menu-item-label">Category</span>
                 </a>
             </li>
+            @endrole
+            @role('admin')
             <li class="--set-active-tables-html">
                 <a href="{{route('tag.index')}}">
                     <span class="icon"><i class="mdi mdi-tag"></i></span>
                     <span class="menu-item-label">Tag</span>
                 </a>
             </li>
+            @endrole
             <li class="--set-active-tables-html">
                 <a href="{{route('log.index')}}">
                     <span class="icon"><i class="mdi mdi-math-log"></i></span>

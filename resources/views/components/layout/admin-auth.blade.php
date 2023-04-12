@@ -21,8 +21,6 @@
     <!-- Material Design Icons -->
     <link href="https://cdn.jsdelivr.net/npm/@mdi/font@7.1.96/css/materialdesignicons.min.css" media="all" rel="stylesheet" type="text/css"/>
 
-    <!-- Styles -->
-    @livewireStyles
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])

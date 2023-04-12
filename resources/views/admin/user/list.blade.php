@@ -46,16 +46,55 @@
             </div>
         @endif
         <div class="card has-table">
-            <header class="card-header">
-                <p class="card-header-title">
-                    <span class="icon"><i class="mdi mdi-account-multiple"></i></span>
-                    Clients
-                </p>
-                <a class="card-header-icon" href="{{url()->current()}}">
-                    <span class="icon"><i class="mdi mdi-reload"></i></span>
-                </a>
-            </header>
             @if($list_users != null)
+                <header class="card-header" style="justify-content: space-between">
+                    <p class="card-header-title" style="flex-grow: 0">
+                        <span class="icon"><i class="mdi mdi-account-multiple"></i></span>
+                        Clients
+                    </p>
+                    <div class="card-header-title">
+                        <a class="navbar-item" style="padding-right: 0"><span class="mdi mdi-filter"></span></a>
+                        <div class="navbar-item dropdown">
+                            <div class="navbar-link">
+                                <span>Role</span>
+                                <span class="icon"><i class="mdi mdi-account-settings"></i></span>
+                            </div>
+                            <div class="navbar-dropdown">
+                                @if(!empty($list_role_attribute))
+                                    @foreach($list_role_attribute as $name_attribute)
+                                        <form action="{{route('user.index')}}" method="get" class="navbar-item">
+                                            <input type="submit" name="name_role" value="{{$name_attribute}}"
+                                                   style="width: 100%;">
+                                        </form>
+                                        <hr>
+                                    @endforeach
+                                @endif
+                            </div>
+                        </div>
+                        <div class="navbar-item dropdown">
+                            <div class="navbar-link">
+                                <span>Email</span>
+                                <span class="icon">
+                                <i class="mdi mdi-email"></i>
+                            </span>
+                            </div>
+                            <div class="navbar-dropdown">
+                                @if(!empty($list_email_attribute))
+                                    @foreach($list_email_attribute as $email_attribute)
+                                        <form action="{{route('user.index')}}" method="get" class="navbar-item">
+                                            <input type="submit" name="email" value="{{$email_attribute}}"
+                                                   style="width: 100%;">
+                                        </form>
+                                        <hr>
+                                    @endforeach
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                    <a class="card-header-icon" href="{{url()->current()}}">
+                        <span class="icon"><i class="mdi mdi-reload"></i></span>
+                    </a>
+                </header>
                 <div class="card-content">
                     <table>
                         <thead>
@@ -76,8 +115,9 @@
                         </tr>
                         </thead>
                         <tbody>
-                        @if($list_users)
-                            @foreach($list_users as $user)
+                        @foreach($list_users as $user)
+                            @php($str = implode('', $user->roles->pluck('name','name')->all()))
+                            @if(str_contains($str, $name_role))
                                 <tr>
                                     <td class="checkbox-cell">
                                         <label class="checkbox">
@@ -88,46 +128,45 @@
                                     <td class="image-cell">
                                         <div class="image">
                                             <img class="rounded-full"
-                                                 src="https://avatars.dicebear.com/v2/initials/{{$user['name']}}.svg">
+                                                 src="https://avatars.dicebear.com/v2/initials/{{$user['name']}}.svg"
+                                                 alt="img">
                                         </div>
                                     </td>
                                     <td data-label="Name">{{$user['name']}}</td>
                                     <td data-label="Email">{{$user['email']}}</td>
                                     <td data-label="Role">{{implode('', $user->roles->pluck('name','name')->all())}}</td>
                                     <td data-label="Created">
-                                        <small class="text-gray-500" title="Oct 25, 2021">{{$user['created_at']}}</small>
+                                        <small class="text-gray-500"
+                                               title="Oct 25, 2021">{{$user['created_at']}}</small>
                                     </td>
                                     <td data-label="Updated At">
-                                        <small class="text-gray-500" title="Oct 25, 2021">{{$user['updated_at']}}</small>
+                                        <small class="text-gray-500"
+                                               title="Oct 25, 2021">{{$user['updated_at']}}</small>
                                     </td>
                                     <td class="actions-cell">
                                         <div class="buttons right nowrap">
                                             <a class="button small blue" href="{{route('user.edit', $user['id'])}}">
                                                 <span class="icon"><i class="mdi mdi-pencil"></i></span>
                                             </a>
-                                            <a class="button small red" href="{{route('user.destroy', $user['id'])}}" onclick="return confirm('Are you sure to delete?')">
-                                                <span class="icon"><i class="mdi mdi-delete"></i></span>
-                                            </a>
+                                            <button class="button small red --jb-modal" data-target="delete-modal"
+                                                    data-url="{{route('user.destroy', $user['id'])}}" type="button">
+                                                <span class="icon"><i class="mdi mdi-trash-can"></i></span>
+                                            </button>
                                         </div>
                                     </td>
                                 </tr>
-                            @endforeach
-                        @else
-                            <tr>
-                                <td colspan="8">
-                                    There are no data
-                                </td>
-                            </tr>
-                        @endif
+
+                            @endif
+                        @endforeach
                         </tbody>
                     </table>
 
                     <div class="table-pagination">
-
                         <div class="flex items-center justify-between">
-
                             <div class="buttons">
-                                <a class="button" href="{{$list_users->previousPageUrl()}}">Previous</a>
+                                @if(($list_users->previousPageUrl()) != null)
+                                    <a class="button" href="{{$list_users->previousPageUrl()}}">Previous</a>
+                                @endif
                                 @for($i = 1; $i <= $list_users->lastPage() ; $i++)
                                     @if($list_users->currentPage() == $i)
                                         <a class="button active"
@@ -136,8 +175,9 @@
                                         <a class="button" href="{{url()->current()."?page=".$i}}">{{$i}}</a>
                                     @endif
                                 @endfor
-
-                                <a class="button" href="{{$list_users->nextPageUrl()}}">Next</a>
+                                @if(!empty($list_users->nextPageUrl()))
+                                    <a class="button" href="{{$list_users->nextPageUrl()}}">Next</a>
+                                @endif
                             </div>
                             <small>Page {{$list_users->currentPage()}} of 3</small>
                         </div>

@@ -34,22 +34,6 @@
                             <p class="help" style="color: red"><b>{{$message}}</b></p>
                             @enderror
                         </div>
-                        <div class="field">
-                            <label class="label">Creator</label>
-                            <div class="control">
-                                <div class="select">
-                                    <select name="user_id">
-                                        <option value="">Selecr user</option>
-                                        @foreach($list_users as $user)
-                                            <option value="{{$user['id']}}">{{$user['name']}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                            @error('user_id')
-                            <p class="help" style="color: red"><b>{{$message}}</b></p>
-                            @enderror
-                        </div>
                         <div class="field grouped">
                             <div class="control">
                                 <button class="button green" type="submit">

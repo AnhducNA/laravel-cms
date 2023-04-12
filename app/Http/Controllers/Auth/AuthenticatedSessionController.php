@@ -10,6 +10,7 @@ use Illuminate\Validation\Rules\Password;
 
 class AuthenticatedSessionController extends Controller
 {
+//    admin
     function create()
     {
         return view('admin.auth.login');
@@ -17,14 +18,23 @@ class AuthenticatedSessionController extends Controller
 
     function store(Request $request)
     {
+//        dd($request->all());
         $credentials = $request->validate(['email' => [], 'password' => [Password::defaults()],]);
 
         if (Auth::attempt($credentials)) {
-            return redirect(route('admin.dashboard'));
+            if(!empty($request->get('type_login'))){
+                $type_login=!empty($request->get('type_login'));
+                if($type_login== 'client'){
+                    return redirect(url('/'));
+                } else{
+                    return redirect(route('admin.dashboard'));
+                }
+            }else{
+                return redirect(route('admin.dashboard'));
+            }
         } else {
             return redirect(route('admin.login'));
         }
-
     }
 
     function destroy(Request $request)

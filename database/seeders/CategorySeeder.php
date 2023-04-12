@@ -14,9 +14,9 @@ class CategorySeeder extends Seeder
      */
     public function run(): void
     {
-        $now = Carbon::now();
-        Category::create(['id'=>1, 'name'=>'Post', 'slug'=>'post', 'user_id'=>1, 'created_at'=> $now]);
-        Category::create(['id'=>2, 'name'=>'Social', 'slug'=>'social', 'user_id'=>3, 'created_at'=> $now]);
-        Category::create(['id'=>3, 'name'=>'Video', 'slug'=>'video', 'user_id'=>3, 'created_at'=> $now]);
+//        $now = Carbon::now()->toDateTimeString();
+//        Category::create(['id'=>1, 'name'=>'Post', 'slug'=>'post', 'user_id'=>1, 'created_at'=> $now]);
+//        Category::create(['id'=>2, 'name'=>'Social', 'slug'=>'social', 'user_id'=>3, 'created_at'=> $now]);
+//        Category::create(['id'=>3, 'name'=>'Video', 'slug'=>'video', 'user_id'=>3, 'created_at'=> $now]);
     }
 }
