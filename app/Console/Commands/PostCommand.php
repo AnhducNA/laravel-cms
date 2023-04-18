@@ -39,46 +39,63 @@ class PostCommand extends Command
     function PostDanTri($client, $url)
     {
         try {
-            $client = new Client(['timeout' => 120]);
-            $url = "https://dantri.com.vn";
-
 //        get category
             $list_categories = Category::all();
             foreach ($list_categories as $category) {
-                $id_category = $category->id;
-                $url_category = $url . $category->slug;
+                for ($i=1; $i<=2; $i++){
+                    $url_category = $url . $category->slug .'/'.'trang-'.$i. '.htm';
+                    $slug_category = $category->slug;
+                    $id_category = $category->id;
 //            crawl data
-                $response = $client->get($url_category);
-                $html = $response->getBody()->getContents();
-                $crawler = new Crawler($html);
-
-                $crawler->filter('.article.list article.article-item')->each(function (Crawler $node, $i) use ($url, $id_category) {
-                    $post['thumbnail'] = $node->filter('.article-thumb a img')->attr('data-src');
-//                    dd($post['thumbnail']);
-                    $post['title'] = $node->filter('.article-content h3.article-title a')->text();
-                    $post['slug'] = ltrim($node->filter('.article-content h3.article-title a')->attr('href'), '/');
-                    $post['description'] = crawlPostContent($url . $post['slug']);
-                    $post['excerpt'] = $node->filter('.article-content .article-excerpt a')->text();
-                    $post['category_id'] = $id_category;
-                    $post['status'] = "DRAFT";
-                    Post::updateOrInsert(['slug' => $post['slug']], $post);
-                });
+                    $response = $client->get($url_category);
+                    $html = $response->getBody()->getContents();
+                    $crawler = new Crawler($html);
+                    $crawler->filter('.article.list article.article-item')->each(function (Crawler $node, $i) use ($id_category, $slug_category, $url) {
+                        $trim_category = trim($node->filter('.article-content h3.article-title a')->attr('href'), '/' . $slug_category);
+                        $sub_tail = substr($trim_category, 0, -4);
+                        $post['title'] = $node->filter('.article-content h3.article-title a')->text();
+                        $post['slug'] = $sub_tail;
+                        $post['description'] = $this->crawlPostContent($url .$slug_category.'/'. $post['slug'] . '.htm');
+                        $post['thumbnail'] = $node->filter('.article-thumb a img')->attr('data-src');
+                        $post['excerpt'] = $node->filter('.article-content .article-excerpt a')->text();
+                        $post['category_id'] = $id_category;
+                        $post['status'] = "DRAFT";
+                        $this->info($url .$slug_category.'/'. $post['slug'] . '.htm');
+                        Post::updateOrInsert(['slug' => $post['slug']], $post);
+                    });
+                }
             }
         } catch (Exception $e) {
             $this->error('Unknown error: ' . $e->getMessage());
         }
     }
+    function crawlPostContent($url_post): string
+    {
+        try {
+            $client = new Client(['timeout' => 120]);
+            $response = $client->get($url_post);
+            $html = $response->getBody()->getContents();
+            $crawler = new Crawler($html);
+            $content = $crawler->filter('.singular-content')->html();
+            return $content;
+        } catch (Exception $e) {
+            return "";
+        }
+    }
+    function crawl_userPost($url_post): string
+    {
+        try {
+//    dd($url_post);
+            $client = new Client(['timeout' => 120]);
+            $response = $client->get($url_post);
+            $html = $response->getBody()->getContents();
+            $crawler = new Crawler($html);
+            dd($crawler->filter(''));
+            return $crawler->filter('.singular-content')->html();
+        } catch (Exception $e) {
+            return "";
+        }
+    }
+
 }
 
-function crawlPostContent($url_post): string
-{
-    $client = new Client(['timeout' => 120]);
-    $response = $client->get($url_post);
-    $html = $response->getBody()->getContents();
-    $crawler = new Crawler($html);
-    try {
-        return $crawler->filter('.singular-content')->html();
-    } catch (Exception $e) {
-        return "";
-    }
-}

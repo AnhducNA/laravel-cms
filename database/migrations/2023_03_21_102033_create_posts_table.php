@@ -13,11 +13,12 @@ return new class extends Migration
     {
         Schema::create('posts', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
+            $table->string('title')->index();
             $table->string('slug')->index();
             $table->text('excerpt')->nullable();
             $table->text('description')->nullable();
             $table->string('status')->nullable();
+            $table->integer('pageview')->nullable();
             $table->unsignedBigInteger('category_id')->nullable()->index();
             $table->unsignedBigInteger('user_id')->nullable()->index();
             $table->string('thumbnail')->nullable();

@@ -15,26 +15,29 @@ class CrawlController extends Controller
     function test()
     {
         $client = new Client(['timeout' => 120]);
-        $url = "https://dantri.com.vn";
+        $url = "https://dantri.com.vn/";
 
 //        get category
         $list_categories = Category::all();
         foreach ($list_categories as $category) {
             $id_category = $category->id;
-            $url_category = $url . $category->slug;
+            $url_category = $url . $category->slug.".htm";
+            $slug_category = $category->slug;
 //            crawl data
             $response = $client->get($url_category);
             $html = $response->getBody()->getContents();
             $crawler = new Crawler($html);
-            $crawler->filter('.article.list article.article-item')->each(function (Crawler $node, $i) use ($id_category, $url) {
+            $crawler->filter('.article.list article.article-item')->each(function (Crawler $node, $i) use ($id_category,$slug_category, $url) {
+               $trim_category = trim($node->filter('.article-content h3.article-title a')->attr('href'), '/'.$slug_category);
+               $sub_tail = substr($trim_category, 0, -4);
                 $post['title'] = $node->filter('.article-content h3.article-title a')->text();
-                $post['slug'] = ltrim($node->filter('.article-content h3.article-title a')->attr('href'), '/');
-                $post['description'] = $this->crawlPostContent($url . $post['slug']);
+                $post['slug'] = $sub_tail;
+                $post['description'] = $this->crawlPostContent($url . $post['slug'].'.htm');
                 $post['thumbnail'] = $node->filter('.article-thumb a img')->attr('data-src');
                 $post['excerpt'] = $node->filter('.article-content .article-excerpt a')->text();
                 $post['category_id'] = $id_category;
                 $post['status'] = "DRAFT";
-                Post::updateOrInsert(['slug' => $post['slug']], $post);
+//                Post::updateOrInsert(['slug' => $post['slug']], $post);
             });
         }
     }
@@ -42,11 +45,13 @@ class CrawlController extends Controller
     function crawlPostContent($url_post)
     {
         try {
-        $client = new Client(['timeout' => 120]);
-        $response = $client->get($url_post);
-        $html = $response->getBody()->getContents();
-        $crawler = new Crawler($html);
-            return $crawler->filter('.singular-content')->html();
+//            dd($url_post);
+            $client = new Client(['timeout' => 120]);
+            $response = $client->get($url_post);
+            $html = $response->getBody()->getContents();
+            $crawler = new Crawler($html);
+            $content = $crawler->filter('.singular-content')->html();
+            return $content;
         } catch (Exception $e) {
             return "";
         }
@@ -62,7 +67,7 @@ class CrawlController extends Controller
 
         $crawler = $crawler->filter('nav.menu ol.menu-wrap li.has-child')->each(function (Crawler $node, $i) {
             $category['name'] = $node->filter('a')->text();
-            $category['slug'] = $node->filter('a')->attr('href');
+            $category['slug'] = substr($node->filter('a')->attr('href'), 1, -4);
             Category::updateOrInsert(['slug' => $category['slug']], $category);
             dump($i);
             echo "<pre>";

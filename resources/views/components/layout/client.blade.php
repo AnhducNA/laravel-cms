@@ -84,6 +84,12 @@
             </a>
         </div>
     </div>
+    <div>
+        <form method="get" action="{{route('client.search')}}" class="input-group">
+            <input type="text" name="search" class="form-control" placeholder="Search...">
+            <input type="submit" value="Search" class="btn btn-primary">
+        </form>
+    </div>
     @if(Auth::check())
         <div class="header__navbar2 d-flex justify-content-around " style="position: relative">
             <a class="icon icon-notification align-middle">
@@ -106,7 +112,6 @@
                 style="position: absolute;background: white;top: 38px;right: 0; list-style: none">
                 <li><a id="user_edit" href="{{route('client.profile', Auth::id())}}" class="btn">Profile</a></li>
                 <li><a id="user_logout" href="{{route('client.logout')}}" class="btn">Logout</a></li>
-
             </ul>
         </div>
     @else
@@ -115,7 +120,6 @@
             <a href="javascript:" class="btn btn-dark">Đăng ký</a>
         </div>
     @endif
-
 </header>
 <div id="show_menu_md" class="dropdown-menu-md">
     <div class="w-100 h-100 position-relative">
@@ -198,47 +202,6 @@
     </div>
 </div>
 {{$slot}}
-<footer id="footer">
 
-</footer>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-<script type="text/javascript">
-    let user_dropdown = document.getElementById('user_dropdown');
-    user_dropdown.style.display = 'none';
-
-    function click_user(event) {
-        if (user_dropdown.classList.contains('show')) {
-            user_dropdown.style.display = 'none';
-            user_dropdown.classList.remove('show');
-            console.log(event.target)
-        } else {
-            user_dropdown.style.display = 'block';
-            user_dropdown.classList.add('show');
-        }
-
-    }
-    {{--    show menu md--}}
-    const show_menu_md = document.getElementById('show_menu_md');
-    document.getElementById('menu_md').addEventListener("click", function () {
-        // console.log(show_menu_md.style.display);
-        if (show_menu_md.style.display === '' || show_menu_md.style.display === 'none') {
-            show_menu_md.style.cssText = `
-            display: block;
-       `
-            document.getElementById('menu_md').style.display = 'none';
-            document.getElementById('btn_close_menu_md').style.display = 'block';
-        }
-    });
-    document.getElementById('btn_close_menu_md').addEventListener("click", function () {
-        if (show_menu_md.style.display === 'block') {
-            show_menu_md.style.cssText = `
-           display: none;
-       `
-            document.getElementById('menu_md').style.display = 'block';
-            document.getElementById('btn_close_menu_md').style.display = 'none';
-        }
-    });
-</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/js/all.min.js"></script>
 </body>
 </html>

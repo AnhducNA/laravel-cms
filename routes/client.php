@@ -5,6 +5,8 @@ use App\Http\Controllers\Client\UserController;
 use App\Http\Controllers\CrawlController;
 use App\Http\Controllers\FaceBookController;
 use App\Http\Controllers\GoogleController;
+use App\Http\Middleware\IsClient;
+use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -29,12 +31,11 @@ Route::middleware('auth')->group(function () {
     Route::post('/profile/{id}/update', [UserController::class, 'store_profile'])->name('client.store_profile');
 });
 
-Route::middleware([\App\Http\Middleware\IsClient::class])->group(function (){
+Route::middleware([IsClient::class])->group(function () {
     Route::get('/', [HomeController::class, 'index']);
-    Route::get('/category/{slug}', function ($slug){
-        dd($slug);
-        return view('client.detail_category');
-    })->name('client.category');
+    Route::get('/category/{slug}', [HomeController::class, 'category'])->name('client.category');
+    Route::get('/post/{slug}', [HomeController::class, 'detail_post'])->name('client.post');
+    Route::get('/search', [HomeController::class, 'search'])->name('client.search');
 });
 
 Route::get('/crawl/category', [CrawlController::class, 'category']);

@@ -49,14 +49,15 @@
             </ol>
         </div>
         <div class="container">
-            <nav class="sub-menu navbar navbar-expand-lg ">
+            <nav class="sub-menu navbar navbar-expand-lg " style="overflow-x: auto">
                 <ul class="navbar-nav w-100">
-                    @foreach($list_categories as $category )
-                        <li class="nav-item active">
-                            <a class="btn btn-sub-menu" href="{{route('client.category', $category->slug)}}">{{$category->name}}</a>
-                        </li>
-                    @endforeach
-
+                    @if(!empty($list_categories))
+                        @foreach($list_categories as $category )
+                                <li class="nav-item">
+                                    <a class="btn btn-sub-menu" href="{{route('client.category', $category->slug)}}">{{$category->name}}</a>
+                                </li>
+                        @endforeach
+                    @endif
                 </ul>
             </nav>
             <div class="news">
@@ -69,8 +70,8 @@
                 <div class="d-flex justify-content-between flex-column flex-md-row">
                     <div class="main-news box col-12 col-md-main-news ">
                         <div class="box-top">
-                            <a href="detail.html" class="w-100 h-100">
-                                <img class="img-main-news" src="{{asset($list_post[3]->thumbnail)}}"
+                            <a href="{{route('client.post', $list_post[0]->slug)}}" class="w-100 h-100">
+                                <img class="img-main-news" src="@if(!empty($list_post[0])) {{asset($list_post[0]->thumbnail)}} @endif"
                                      alt="main-news.png">
                             </a>
                             <span class="icon-heart">
@@ -79,8 +80,9 @@
                         </div>
                         <div class="box-content">
                             <p class="p-title"><a href="">
-                                    {{$list_post[3]->title}}
-                                </a></p>
+                                    @if(!empty($list_post[0])) {{$list_post[0]->title}} @endif
+                                </a>
+                            </p>
                             <ul>
                                 <li><a href="#"><p>Xã hội</p></a></li>
                                 <li><span class="dot"><svg width="3" height="4" viewBox="0 0 3 4" fill="none"
@@ -95,44 +97,46 @@
                                 <li><p>24/02/2020</p></li>
                             </ul>
                             <p class="p-content">
-                                {{$list_post[3]->excerpt}}
+                                @if(!empty($list_post[0])) {{$list_post[0]->excerpt}}  @endif
                             </p>
                         </div>
                     </div>
-                    <div class="sub-news row box col-12 col-md-sub-news flex-column flex-sm-row"
-                         style=" overflow-y: auto; height: 650px;">
-                        @foreach($list_post as $post)
-                            <div class="sub-news-item col-sm-6 col-md-12">
-                                <div class="box-top">
-                                    <a href="{{$post->slug}}" class="w-100 h-100">
-                                        <img class="img-main-news" src="{{$post->thumbnail}}" alt="main-news.png">
-                                    </a>
-                                    <span class="icon-heart">
-                                <i class="fa-solid fa-heart"></i>
-                            </span>
-                                </div>
-                                <div class="box-content">
-                                    <p class="p-title"><a href="">
-                                            {{$post->title}}
-                                        </a></p>
-                                    <ul>
-                                        <li><a href="#"><p>{{$post->category->name}}</p></a></li>
-                                        <li><span class="dot"><svg width="3" height="4" viewBox="0 0 3 4" fill="none"
-                                                                   xmlns="http://www.w3.org/2000/svg">
+                    @if(!empty($list_post))
+                        <div class="sub-news row box col-12 col-md-sub-news flex-column flex-sm-row"
+                             style=" overflow-y: auto; height: 650px;">
+                            @foreach($list_post as $key_post => $post)
+                                @if($key_post != 0)
+                                    <div class="sub-news-item col-sm-6 col-md-12">
+                                        <div class="box-top">
+                                            <a href="{{route('client.post', $post->slug)}}" class="w-100 h-100">
+                                                <img class="img-main-news" src="{{$post->thumbnail}}" alt="main-news.png">
+                                            </a>
+                                            <span class="icon-heart"><i class="fa-solid fa-heart"></i></span>
+                                        </div>
+                                        <div class="box-content">
+                                            <p class="p-title"><a href="{{route('client.post', $post->slug)}}">
+                                                    {{$post->title}}
+                                                </a>
+                                            </p>
+                                            <ul>
+                                                <li><a href="{{route('client.category', $post->category->slug)}}"><p>{{$post->category->name}}</p></a></li>
+                                                <li><span class="dot"><svg width="3" height="4" viewBox="0 0 3 4" fill="none"
+                                                                           xmlns="http://www.w3.org/2000/svg"><circle cx="1.5" cy="1.56641" r="1.5" fill="#3B4144"/></svg></span>
+                                                </li>
+                                                <li><p>Quang Anh Trần</p></li>
+                                                @if($post->created_at)
+                                                    <li><span class="dot"><svg width="3" height="4" viewBox="0 0 3 4" fill="none"
+                                                                               xmlns="http://www.w3.org/2000/svg">
                                 <circle cx="1.5" cy="1.56641" r="1.5" fill="#3B4144"/></svg></span></li>
-                                        <li><p>Quang Anh Trần</p></li>
-                                        @if($post->created_at)
-                                            <li><span class="dot"><svg width="3" height="4" viewBox="0 0 3 4" fill="none"
-                                                                       xmlns="http://www.w3.org/2000/svg">
-                                <circle cx="1.5" cy="1.56641" r="1.5" fill="#3B4144"/></svg></span></li>
-                                            <li><p>{{$post->created_at}}</p></li>
-                                        @endif
-
-                                    </ul>
-                                </div>
-                            </div>
-                        @endforeach
-                    </div>
+                                                    <li><p>{{$post->created_at}}</p></li>
+                                                @endif
+                                            </ul>
+                                        </div>
+                                    </div>
+                                @endif
+                            @endforeach
+                        </div>
+                    @endif
                 </div>
             </div>
             <div class="video">
@@ -144,10 +148,10 @@
                     <div class="main-video col-sm-12 col-md-main-video box">
                         <div class="box-top h-100">
                             <a href="" class="d-block w-100 h-100">
-                                <img class="h-100" src="assets/images/videos/main-video.png" alt="main-video.png">
+                                <img class="h-100" src="{{asset('assets/images/videos/main-video.png')}}" alt="main-video.png">
                             </a>
                             <span class="pause-video">
-                            <img src="assets/images/stop-video.png" alt="stop-video.png">
+                            <img src="{{asset('assets/images/stop-video.png')}}" alt="stop-video.png">
                         </span>
                             <span class="icon-heart">
                                 <i class="fa-solid fa-heart"></i>
@@ -366,5 +370,46 @@
             </div>
         </div>
     </div>
+    <footer id="footer">
 
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+        let user_dropdown = document.getElementById('user_dropdown');
+        user_dropdown.style.display = 'none';
+
+        function click_user(event) {
+            if (user_dropdown.classList.contains('show')) {
+                user_dropdown.style.display = 'none';
+                user_dropdown.classList.remove('show');
+                console.log(event.target)
+            } else {
+                user_dropdown.style.display = 'block';
+                user_dropdown.classList.add('show');
+            }
+
+        }
+        {{--    show menu md--}}
+        const show_menu_md = document.getElementById('show_menu_md');
+        document.getElementById('menu_md').addEventListener("click", function () {
+            // console.log(show_menu_md.style.display);
+            if (show_menu_md.style.display === '' || show_menu_md.style.display === 'none') {
+                show_menu_md.style.cssText = `
+            display: block;
+       `
+                document.getElementById('menu_md').style.display = 'none';
+                document.getElementById('btn_close_menu_md').style.display = 'block';
+            }
+        });
+        document.getElementById('btn_close_menu_md').addEventListener("click", function () {
+            if (show_menu_md.style.display === 'block') {
+                show_menu_md.style.cssText = `
+           display: none;
+       `
+                document.getElementById('menu_md').style.display = 'block';
+                document.getElementById('btn_close_menu_md').style.display = 'none';
+            }
+        });
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/js/all.min.js"></script>
 </x-layout.client>

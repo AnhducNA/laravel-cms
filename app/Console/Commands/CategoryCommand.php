@@ -26,7 +26,7 @@ class CategoryCommand extends Command
         $crawler = new Crawler($html);
         $crawler = $crawler->filter('nav.menu ol.menu-wrap li.has-child')->each(function (Crawler $node, $i){
             $category['name']=$node->filter('a')->text();
-            $category['slug']=$node->filter('a')->attr('href');
+            $category['slug'] = substr($node->filter('a')->attr('href'), 1, -4);
             Category::updateOrInsert(['slug'=>$category['slug']], $category);
         });
     }
