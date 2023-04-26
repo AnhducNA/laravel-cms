@@ -9,6 +9,7 @@ use App\Models\Tag;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class TagController extends Controller
@@ -72,6 +73,40 @@ class TagController extends Controller
         return redirect(route('tag.index'))->with('success', __('Tag updated successfully.'));
     }
 
+    function show($slug){
+        $list_posts = Post::whereHas('tags', function ($query) use ($slug) {
+            $query->where('slug', $slug);
+        })
+        ->with(['user', 'tags'])->paginate(3);
+        $filePath = "";
+        foreach ($list_posts as $key => $post) {
+//            add image to s3 driver
+            if (filter_var($post['thumbnail'], FILTER_VALIDATE_URL) === FALSE){
+                $filePath = "leanhduc/" . $post['thumbnail'];
+                $list_posts[$key]['thumbnail'] = $this->getImageFromS3($filePath);
+            }
+
+//            get list name's tags of post
+            $list_posts[$key]['list_name_tag'] = "";
+            foreach ($post->tags as $key_tag => $tag) {
+                if (count($post->tags) == ($key_tag + 1) || count($post->tags) == 1) {
+                    $list_posts[$key]['list_name_tag'] = $list_posts[$key]['list_name_tag'] . $tag['name'] . ".";
+                } else {
+                    $list_posts[$key]['list_name_tag'] = $tag['name'] . ", " . $list_posts[$key]['list_name_tag'];
+                }
+            }
+
+        }
+        return view('admin.tag.show', compact('list_posts'));
+    }
+    function getImageFromS3($filePath)
+    {
+        $path = Storage::cloud()->temporaryUrl(
+            $filePath,
+            Carbon::now()->addMinute(5)
+        );
+        return $path;
+    }
     /**
      * Remove the specified resource from storage.
      */

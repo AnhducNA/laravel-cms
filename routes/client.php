@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Client\FullTextSearchController;
 use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\Client\UserController;
 use App\Http\Controllers\CrawlController;
@@ -22,20 +23,22 @@ Route::prefix('facebook')->name('facebook.')->group(function () {
 });
 
 Route::get('/login', [UserController::class, 'login'])->name('client.login');
+Route::post('/login', [UserController::class, 'store'])->name('client.store');
 
 Route::get('/logout', [UserController::class, 'logout'])->name('client.logout');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile/{id}', [UserController::class, 'create_profile'])->name('client.profile');
-
     Route::post('/profile/{id}/update', [UserController::class, 'store_profile'])->name('client.store_profile');
+    Route::post('/profile/{id}/change-password', [UserController::class, 'change_password'])->name('client.change_password');
 });
 
-Route::middleware([IsClient::class])->group(function () {
+Route::middleware('client')->group(function () {
     Route::get('/', [HomeController::class, 'index']);
     Route::get('/category/{slug}', [HomeController::class, 'category'])->name('client.category');
     Route::get('/post/{slug}', [HomeController::class, 'detail_post'])->name('client.post');
-    Route::get('/search', [HomeController::class, 'search'])->name('client.search');
+    Route::get('/full-text-search', [FullTextSearchController::class, 'index'])->name('client.search');
+    Route::get('/search/store', [FullTextSearchController::class, 'search']);
 });
 
 Route::get('/crawl/category', [CrawlController::class, 'category']);

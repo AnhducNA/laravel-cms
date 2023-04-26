@@ -4,22 +4,11 @@
         <div class="flex flex-col md:flex-row items-center justify-between space-y-6 md:space-y-0">
             <ul>
                 <li>Admin</li>
-                <li>Article</li>
-                <li>Post</li>
+                <li><a href="{{route('tag.index')}}">Tag</a></li>
             </ul>
-            <a href="{{route('post.create')}}" class="button blue">
-                <span>Add new</span>
-            </a>
         </div>
     </section>
-
-    <section class="is-hero-bar">
-        <div class="flex flex-col md:flex-row items-center justify-between space-y-6 md:space-y-0">
-            <h1 class="title">
-                Post Tables
-            </h1>
-        </div>
-    </section>
+    
 
     <section class="section main-section">
         @if(session()->has('success'))
@@ -36,7 +25,7 @@
         @endif
         <div class="card has-table">
             <header class="card-header" style="justify-content: space-between">
-{{--                 filter--}}
+                {{--                 filter--}}
                 <form action="{{route('post.index')}}" method="GET">
                     <div class="card-header-title">
                         <a class="navbar-item" style="padding-right: 0"><span class="mdi mdi-filter"></span></a>

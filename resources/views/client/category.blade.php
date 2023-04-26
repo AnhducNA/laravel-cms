@@ -71,7 +71,7 @@
                         <div class="item-news row">
                             <div class="box-top ">
                                 <a href="{{route('client.post', $post->slug)}}" class="w-100 h-100">
-                                    <img class="img-main-news" src="{{asset($post->thumbnail)}}" alt="main-news.png">
+                                    <img class="img-main-news rounded" src="{{asset($post->thumbnail)}}" alt="main-news.png">
                                 </a>
                                 <span class="icon-heart">
                                 <i class="fa-solid fa-heart"></i>
@@ -79,7 +79,7 @@
                             </div>
                             <div class="box-content ">
 
-                                <p class="p-title"><a href="{{route('client.post', $post->slug)}}">{{$post->title}}</a></p>
+                                <p class="p-title"><a href="{{route('client.post', $post->slug)}}" class="text-black">{{$post->title}}</a></p>
                                 <ul>
                                     <li><a href="#"><p>{{$post->category->name}}</p></a></li>
                                     <li><span class="dot"><svg width="3" height="4" viewBox="0 0 3 4" fill="none"

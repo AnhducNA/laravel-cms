@@ -44,7 +44,7 @@
                             <strong>Content:</strong>
                         </td>
                         <td>
-                            <span>{{$post['description']}}</span>
+                            <span>{!! $post['description'] !!}</span>
                         </td>
                     </tr>
                     <tr>
@@ -53,7 +53,6 @@
                         </td>
                         <td>
                             <span><img src="{{$post['thumbnail']}} " alt="thumbnail" style="max-width: 200px"></span>
-                            <span>{{$post['thumbnail']}}</span>
                         </td>
                     </tr>
                     <tr>

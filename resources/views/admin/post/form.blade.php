@@ -35,16 +35,14 @@
                         <b style="color: red">{{$message}}</b>
                         @enderror
                     </div>
-
                     <input class="input" type="hidden" name="slug">
-
                     <div class="field">
-                        <label class="label" for="description">Description</label>
+                        <label class="label" for="content">Content</label>
                         <div class="control">
-                            <textarea class="textarea ckeditor" name="description" id="description"
+                            <textarea class="textarea ckeditor" name="description" id="content"
                                       placeholder="Description">
                                 @if(!empty($post))
-                                        <?php echo ($post) ? $post['description'] : '' ?>
+                                    {!! $post['description'] !!}}
                                 @endif
                             </textarea>
                         </div>
@@ -53,19 +51,11 @@
                         @enderror
                     </div>
                     <div class="field">
-                        <label class="label icons-left" for="thumbnail">
+                        <label class="label form-label icons-left">
                             <span class="icon left"><i class="mdi mdi-image-area"></i></span>
                             Thumbnail</label>
-                        <div class="field-body">
-                            <div class="field file">
-                                <label class="upload control">
-                                    <a class="button blue">
-                                        Upload
-                                    </a>
-                                    <input class="input" type="file" name="thumbnail" id="thumbnail" value="">
-                                </label>
-                            </div>
-                        </div>
+                        <input id="thumbnailPost_input" class="input form-control" type="file" name="thumbnail" value="">
+                        <img id="thumbnailPost_img" src="@php echo (!empty($post->thumbnail)) ?  $post->thumbnail : ""@endphp" style="max-width: 20%">
                     </div>
                     <div class="field">
                         <label class="label" for="list_category_select2">Category</label>
@@ -89,7 +79,8 @@
                         </label>
                         <div class="control">
                             <div class="select">
-                                <select id="list_tags_select2" name="list_id_tags[]" class="form-control js-select2" multiple>
+                                <select id="list_tags_select2" name="list_id_tags[]" class="form-control js-select2"
+                                        multiple>
                                     @if(!empty($post->tags))
                                         @foreach($post->tags as $tag)
                                             <option
@@ -113,8 +104,8 @@
                                     }elseif(!empty($post['status']) && $post['status'] == "DRAFT")
                                         $draft_selected = "selected";
                                     @endphp
-                                        <option value="PUBLISHED" {{$published_selected}}>PUBLISHED</option>
-                                        <option value="DRAFT" {{$draft_selected}}>DRAFT</option>
+                                    <option value="PUBLISHED" {{$published_selected}}>PUBLISHED</option>
+                                    <option value="DRAFT" {{$draft_selected}}>DRAFT</option>
                                 </select>
                             </div>
                         </div>

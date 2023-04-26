@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('title')->index();
             $table->string('slug')->index();
-            $table->text('excerpt')->nullable();
+            $table->text('excerpt')->nullable()->index();
             $table->text('description')->nullable();
             $table->string('status')->nullable();
             $table->integer('pageview')->nullable();

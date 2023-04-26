@@ -17,11 +17,25 @@ class IsAdmin
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $user = Auth::user();
-        if ($user->hasRole(['admin'])) {
-            return $next($request);
-        } else {
-            return redirect()->back();
+        if(Auth::check()){
+            $user = Auth::user();
+//            dd(Auth::guard());
+            if (Auth::guard()->name == 'web'){
+//                Auth::guard('web')->logout();
+                Auth::guard('admin')->login($user);
+//                return redirect(route('admin.login'));
+            }
+//            dd(Auth::check());
+            Auth::guard('admin')->login($user);
+            if ($user->hasPermissionTo('admin')) {
+                return $next($request);
+            } else {
+                return redirect(route('admin.login'));
+            }
+        } else{
+            return redirect(route('admin.login'));
+
         }
+
     }
 }

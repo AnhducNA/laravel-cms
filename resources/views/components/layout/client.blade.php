@@ -84,12 +84,12 @@
             </a>
         </div>
     </div>
-    <div>
-        <form method="get" action="{{route('client.search')}}" class="input-group">
-            <input type="text" name="search" class="form-control" placeholder="Search...">
-            <input type="submit" value="Search" class="btn btn-primary">
-        </form>
-    </div>
+{{--    <div>--}}
+{{--        <form method="get" action="{{route('client.search')}}" class="input-group">--}}
+{{--            <input type="text" name="search" class="form-control" placeholder="Search...">--}}
+{{--            <input type="submit" value="Search" class="btn btn-primary">--}}
+{{--        </form>--}}
+{{--    </div>--}}
     @if(Auth::check())
         <div class="header__navbar2 d-flex justify-content-around " style="position: relative">
             <a class="icon icon-notification align-middle">
@@ -111,6 +111,7 @@
             <ul id="user_dropdown" class="user p-0"
                 style="position: absolute;background: white;top: 38px;right: 0; list-style: none">
                 <li><a id="user_edit" href="{{route('client.profile', Auth::id())}}" class="btn">Profile</a></li>
+                <li><a href="" class="btn">Change Password</a></li>
                 <li><a id="user_logout" href="{{route('client.logout')}}" class="btn">Logout</a></li>
             </ul>
         </div>
@@ -202,6 +203,22 @@
     </div>
 </div>
 {{$slot}}
+<script>
+{{--    user dropdown--}}
+    let user_dropdown = document.getElementById('user_dropdown');
+    user_dropdown.style.display = 'none';
 
+    function click_user(event) {
+        if (user_dropdown.classList.contains('show')) {
+            user_dropdown.style.display = 'none';
+            user_dropdown.classList.remove('show');
+            console.log(event.target)
+        } else {
+            user_dropdown.style.display = 'block';
+            user_dropdown.classList.add('show');
+        }
+
+    }
+</script>
 </body>
 </html>

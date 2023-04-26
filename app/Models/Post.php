@@ -4,14 +4,37 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Scout\Searchable;
 
+//use ScoutElastic\Searchable;
 class Post extends Model
 {
+//    php artisan scout:import "App\Models\Post"
     use HasFactory;
+    use Searchable;
 
-    protected $fillable = ['id', 'title', 'slug', 'description','status', 'category_id', 'user_id', 'thumbnail', 'created_at', 'updated_at'];
+    // Define the searchable fields for the model
+    protected $searchable = [
+        'columns' => [
+            'title',
+            'excerpt',
+        ],
+    ];
+
+    protected $fillable = ['id', 'title', 'slug', 'description', 'status', 'category_id', 'user_id', 'thumbnail', 'created_at', 'updated_at'];
+
     protected $table = 'posts';
+
     protected $primaryKey = 'id';
+
+    public function toSearchableArray()
+    {
+        $array = $this->toArray();
+
+        // Customize the searchable array
+
+        return $array;
+    }
 
     function category()
     {

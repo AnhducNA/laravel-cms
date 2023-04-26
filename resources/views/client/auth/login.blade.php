@@ -10,24 +10,20 @@
             <div class="row">
                 <!-- edit form column -->
                 <div class="col-md-9 personal-info">
-                    <div class="d-flex">
-                        <div class="control">
-                            <a href="{{ route('facebook.login') }}">
-                                <div class="fb-login-button" data-width="" data-size="medium" data-button-type=""
-                                     data-layout="" data-auto-logout-link="false" data-use-continue-as="false"></div>
+                    <div class="d-flex mb-5">
+                        <div class="control px-3">
+                            <a href="{{ route('facebook.login') }}" class="btn btn-primary">
+                                <span>Login with Facebook</span>
                             </a>
-
                         </div>
-                        <div class="control">
-                            <a href="{{ url('auth/google') }}">
-                                <img
-                                    src="https://developers.google.com/identity/images/btn_google_signin_dark_normal_web.png"
-                                    style="margin-left: 3em;">
+                        <div class="control px-3">
+                            <a href="{{ url('auth/google') }}" class="btn btn-primary">
+                                <span>Login with Google</span>
                             </a>
                         </div>
                     </div>
                     <form class="form-horizontal" method="post"
-                          action="{{route('admin.login') }}">
+                          action="{{route('client.store') }}">
                         @csrf
                         <div class="form-group">
                             <label class="col-lg-3 control-label"><strong>Email:</strong></label>

@@ -1,4 +1,25 @@
 <?php return array (
+  'babenkoivan/elastic-client' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'ElasticClient\\ServiceProvider',
+    ),
+  ),
+  'babenkoivan/elastic-migrations' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'ElasticMigrations\\ServiceProvider',
+    ),
+  ),
+  'babenkoivan/elastic-scout-driver' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'ElasticScoutDriver\\ServiceProvider',
+    ),
+  ),
   'jenssegers/agent' => 
   array (
     'providers' => 
@@ -36,6 +57,13 @@
     'providers' => 
     array (
       0 => 'Laravel\\Sanctum\\SanctumServiceProvider',
+    ),
+  ),
+  'laravel/scout' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Laravel\\Scout\\ScoutServiceProvider',
     ),
   ),
   'laravel/socialite' => 

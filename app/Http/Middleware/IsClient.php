@@ -16,17 +16,13 @@ class IsClient
      */
     public function handle(Request $request, Closure $next): Response
     {
+
         if (Auth::check()) {
             $user = Auth::user();
-            if ($user->hasRole(['admin'])) {
-                Auth::logout();
-                $request->session()->invalidate();
-                $request->session()->regenerateToken();
-                return redirect(route('client.login'));
-            } else {
-                return $next($request);
-            }
-        }else{
+            Auth::guard('web')->login($user);
+//            dd(Auth::guard());
+            return $next($request);
+        } else {
             return $next($request);
         }
 

@@ -42,8 +42,8 @@ class PostCommand extends Command
 //        get category
             $list_categories = Category::all();
             foreach ($list_categories as $category) {
-                for ($i=1; $i<=2; $i++){
-                    $url_category = $url . $category->slug .'/'.'trang-'.$i. '.htm';
+                for ($i = 1; $i <= 2; $i++) {
+                    $url_category = $url . $category->slug . '/' . 'trang-' . $i . '.htm';
                     $slug_category = $category->slug;
                     $id_category = $category->id;
 //            crawl data
@@ -55,13 +55,16 @@ class PostCommand extends Command
                         $sub_tail = substr($trim_category, 0, -4);
                         $post['title'] = $node->filter('.article-content h3.article-title a')->text();
                         $post['slug'] = $sub_tail;
-                        $post['description'] = $this->crawlPostContent($url .$slug_category.'/'. $post['slug'] . '.htm');
+                        $post['description'] = $this->crawlPostContent($url . $slug_category . '/' . $post['slug'] . '.htm');
                         $post['thumbnail'] = $node->filter('.article-thumb a img')->attr('data-src');
                         $post['excerpt'] = $node->filter('.article-content .article-excerpt a')->text();
                         $post['category_id'] = $id_category;
                         $post['status'] = "DRAFT";
-                        $this->info($url .$slug_category.'/'. $post['slug'] . '.htm');
-                        Post::updateOrInsert(['slug' => $post['slug']], $post);
+                        $this->info($url . $slug_category . '/' . $post['slug'] . '.htm');
+                        $new_post = Post::updateOrCreate(['slug' => $post['slug']], $post);
+//                        dd($new_post->id);
+//                        $new_data = Post::select('id')->where('slug', $post['slug'])->first();
+                        $this->crawlPostTag($url . $slug_category . '/' . $post['slug'] . '.htm', $new_post->id);
                     });
                 }
             }
@@ -69,6 +72,7 @@ class PostCommand extends Command
             $this->error('Unknown error: ' . $e->getMessage());
         }
     }
+
     function crawlPostContent($url_post): string
     {
         try {
@@ -82,6 +86,26 @@ class PostCommand extends Command
             return "";
         }
     }
+
+    function crawlPostTag($url_post, $idPost): string
+    {
+        try {
+            $client = new Client(['timeout' => 120]);
+            $response = $client->get($url_post);
+            $html = $response->getBody()->getContents();
+            $crawler = new Crawler($html);
+            $list_tag = [];
+            $crawler->filter('ul.tags-wrap li')->each(function (Crawler $node, $i) {
+                $list_tag[$i] = $node->filter('a')->text();
+                dd($list_tag);
+            });
+
+            return "";
+        } catch (Exception $e) {
+            return "";
+        }
+    }
+
     function crawl_userPost($url_post): string
     {
         try {

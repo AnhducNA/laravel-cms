@@ -54,6 +54,7 @@ Route::middleware(['auth', \App\Http\Middleware\IsAdmin::class])->prefix('admin'
     Route::post('tag/update/{id}', [TagController::class, 'update'])->name('tag.update');
     Route::get('tag/destroy/{id}', [TagController::class, 'destroy'])->name('tag.destroy');
     Route::get('tag/find', [TagController::class, 'find_select2'])->name('tag.find');
+    Route::get('tag/show/{id}', [TagController::class, 'show'])->name('tag.show');
 
     Route::get('/logs', [LogController::class, 'index'])->name('log.index');
     Route::get('/logs/{file}', [LogController::class, 'preview'])->name('log.preview');

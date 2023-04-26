@@ -69,3 +69,19 @@ function sort(event, sort_col) {
         sort_type_element.setAttribute('value', 'asc');
     }
 }
+//     set src for img
+const figures = document.querySelectorAll("figure img");
+figures.forEach(function (node) {
+    const data_src = node.getAttribute('data-src');
+    node.setAttribute('src', data_src);
+});
+
+// Preview an image before it is uploaded in form
+const thumbnailPost_input = document.querySelector("#thumbnailPost_input");
+const thumbnailPost_img = document.querySelector("#thumbnailPost_img");
+thumbnailPost_input.onchange = evt => {
+    const [file] = thumbnailPost_input.files
+    if (file) {
+        thumbnailPost_img.src = URL.createObjectURL(file)
+    }
+}

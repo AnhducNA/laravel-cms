@@ -15,6 +15,7 @@ class PermissionSeeder extends Seeder
     public function run(): void
     {
         // Create permissions
+        Permission::create(['name' => 'admin']);
         Permission::create(['name' => 'manage_all']);
         Permission::create(['name' => 'manage_user']);
         Permission::create(['name' => 'manage_article']);
@@ -29,9 +30,9 @@ class PermissionSeeder extends Seeder
         Role::create(['name' => 'tag_admin']);
 
         // Assign permissions to roles
-        Role::findByName('admin')->givePermissionTo('manage_all');
-        Role::findByName('user_admin')->givePermissionTo('manage_user');
-        Role::findByName('article_admin')->givePermissionTo('manage_article');
+        Role::findByName('admin')->givePermissionTo('admin', 'manage_all');
+        Role::findByName('user_admin')->givePermissionTo(['admin', 'manage_user']);
+        Role::findByName('article_admin')->givePermissionTo(['admin', 'manage_all', 'manage_article']);
         Role::findByName('category_admin')->givePermissionTo('manage_category');
         Role::findByName('tag_admin')->givePermissionTo('manage_tag');
 

@@ -86,6 +86,9 @@
                                 </td>
                                 <td class="actions-cell">
                                     <div class="buttons right nowrap">
+                                        <a class="button small green" href="{{route('tag.show', $tag->slug)}}">
+                                            <span class="icon"><i class="mdi mdi-eye-plus mdi-24px"></i></span>
+                                        </a>
                                         <a class="button small blue" href="{{route('tag.edit', $tag['id'])}}">
                                             <span class="icon"><i class="mdi mdi-pencil"></i></span>
                                         </a>

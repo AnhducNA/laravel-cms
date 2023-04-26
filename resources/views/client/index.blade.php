@@ -49,6 +49,7 @@
             </ol>
         </div>
         <div class="container">
+            <a href="{{route('client.search')}}" class="btn btn-success d-block mt-3">Full text search</a>
             <nav class="sub-menu navbar navbar-expand-lg " style="overflow-x: auto">
                 <ul class="navbar-nav w-100">
                     @if(!empty($list_categories))
@@ -67,20 +68,20 @@
                     </a>
                     <p class="p-headding">Tin tức</p>
                 </div>
-                <div class="d-flex justify-content-between flex-column flex-md-row">
+                <div class="d-flex justify-content-between flex-column flex-md-row" style="max-height: 650px">
                     <div class="main-news box col-12 col-md-main-news ">
                         <div class="box-top">
-                            <a href="{{route('client.post', $list_post[0]->slug)}}" class="w-100 h-100">
-                                <img class="img-main-news" src="@if(!empty($list_post[0])) {{asset($list_post[0]->thumbnail)}} @endif"
-                                     alt="main-news.png">
+                            <a href="{{route('client.post', $list_posts[0]->slug)}}" class="w-100 h-100">
+                                <img class="img-main-news rounded" src="@if(!empty($list_posts[0])) {{asset($list_posts[0]->thumbnail)}} @endif"
+                                     alt="main-news.png" >
                             </a>
                             <span class="icon-heart">
                             <i class="fa-solid fa-heart"></i>
                         </span>
                         </div>
                         <div class="box-content">
-                            <p class="p-title"><a href="">
-                                    @if(!empty($list_post[0])) {{$list_post[0]->title}} @endif
+                            <p class="p-title"><a href="{{route('client.post', $list_posts[0]->slug)}}" class=" text-black">
+                                    @if(!empty($list_posts[0])) {{$list_posts[0]->title}} @endif
                                 </a>
                             </p>
                             <ul>
@@ -97,24 +98,25 @@
                                 <li><p>24/02/2020</p></li>
                             </ul>
                             <p class="p-content">
-                                @if(!empty($list_post[0])) {{$list_post[0]->excerpt}}  @endif
+                                @if(!empty($list_posts[0])) {{$list_posts[0]->excerpt}}  @endif
                             </p>
                         </div>
                     </div>
-                    @if(!empty($list_post))
+                    @if(!empty($list_posts))
                         <div class="sub-news row box col-12 col-md-sub-news flex-column flex-sm-row"
                              style=" overflow-y: auto; height: 650px;">
-                            @foreach($list_post as $key_post => $post)
+                            @foreach($list_posts as $key_post => $post)
                                 @if($key_post != 0)
                                     <div class="sub-news-item col-sm-6 col-md-12">
                                         <div class="box-top">
                                             <a href="{{route('client.post', $post->slug)}}" class="w-100 h-100">
-                                                <img class="img-main-news" src="{{$post->thumbnail}}" alt="main-news.png">
+                                                <img class="img-main-news rounded" src="{{$post->thumbnail}}" alt="main-news.png">
                                             </a>
                                             <span class="icon-heart"><i class="fa-solid fa-heart"></i></span>
                                         </div>
                                         <div class="box-content">
-                                            <p class="p-title"><a href="{{route('client.post', $post->slug)}}">
+                                            <p class="p-title">
+                                                <a href="{{route('client.post', $post->slug)}}" class=" text-black">
                                                     {{$post->title}}
                                                 </a>
                                             </p>
@@ -338,7 +340,7 @@
                             <div class="box-content">
                                 <a class="w-100 h-100" href="">
                                     <img alt="main-news.png" class="img-main-news"
-                                         src="assets/images/news/sub-news1.png">
+                                         src="{{asset('assets/images/news/sub-news1.png')}}">
                                 </a>
                             </div>
                             <div class="box-content box-content2 col-12">
@@ -375,20 +377,7 @@
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script type="text/javascript">
-        let user_dropdown = document.getElementById('user_dropdown');
-        user_dropdown.style.display = 'none';
 
-        function click_user(event) {
-            if (user_dropdown.classList.contains('show')) {
-                user_dropdown.style.display = 'none';
-                user_dropdown.classList.remove('show');
-                console.log(event.target)
-            } else {
-                user_dropdown.style.display = 'block';
-                user_dropdown.classList.add('show');
-            }
-
-        }
         {{--    show menu md--}}
         const show_menu_md = document.getElementById('show_menu_md');
         document.getElementById('menu_md').addEventListener("click", function () {

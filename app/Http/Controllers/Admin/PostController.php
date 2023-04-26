@@ -61,14 +61,18 @@ class PostController extends Controller
 //                ->get();
         } else {
             $list_posts = Post::with(['user', 'category', 'tags'])
+                ->orderBy('id', 'DESC')
                 ->paginate(10);
         }
 
         $filePath = "";
         foreach ($list_posts as $key => $post) {
 //            add image to s3 driver
-            $filePath = "leanhduc/" . $post['thumbnail'];
-            $list_posts[$key]['thumbnail'] = $this->getImageFromS3($filePath);
+            if (filter_var($post['thumbnail'], FILTER_VALIDATE_URL) === FALSE){
+                $filePath = "leanhduc/" . $post['thumbnail'];
+                $list_posts[$key]['thumbnail'] = $this->getImageFromS3($filePath);
+            }
+
 //            get list name's tags of post
             $list_posts[$key]['list_name_tag'] = "";
             foreach ($post->tags as $key_tag => $tag) {
@@ -78,6 +82,7 @@ class PostController extends Controller
                     $list_posts[$key]['list_name_tag'] = $tag['name'] . ", " . $list_posts[$key]['list_name_tag'];
                 }
             }
+
         }
         return view('admin.post.list', compact('list_posts'));
     }
@@ -94,6 +99,10 @@ class PostController extends Controller
     function show($id)
     {
         $post = Post::find($id);
+        if (filter_var($post['thumbnail'], FILTER_VALIDATE_URL) === FALSE){
+            $filePath = "leanhduc/" . $post['thumbnail'];
+            $post['thumbnail'] = $this->getImageFromS3($filePath);
+        }
         return view('admin.post.show', compact('post'));
     }
 
@@ -174,6 +183,8 @@ class PostController extends Controller
         ]);
         if (!empty($request->list_id_tags)) {
             $data['list_id_tags'] = $request->list_id_tags;
+        } else{
+            $data['list_id_tags'] = [];
         }
         $data['user_id'] = Auth::id();
         $data['slug'] = Str::slug($data['title']);

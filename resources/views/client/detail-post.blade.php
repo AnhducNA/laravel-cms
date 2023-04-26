@@ -32,8 +32,9 @@
                                 <li><p>24/02/2020</p></li>
                             @endif
                             @if($post->pageview)
-                                <li style="color: black"><span class="dot"><svg fill="none" height="4" viewBox="0 0 3 4" width="3"
-                                                           xmlns="http://www.w3.org/2000/svg">
+                                <li style="color: black"><span class="dot"><svg fill="none" height="4" viewBox="0 0 3 4"
+                                                                                width="3"
+                                                                                xmlns="http://www.w3.org/2000/svg">
                                 <circle cx="1.5" cy="1.56641" fill="#3B4144" r="1.5"/></svg></span></li>
                                 <li><p><strong>{{$post->pageview}}</strong> lượt xem</p></li>
                             @endif
@@ -104,14 +105,15 @@
 
                             <div class="d-flex justify-content-between">
                                 <div class="box-content">
-                                    <a class="w-100 h-100" href="">
-                                        <img alt="main-news.png" class="img-main-news"
+                                    <a class="w-100 h-100" href="{{route('client.post', $post_similar->slug)}}">
+                                        <img alt="main-news.png" class="img-main-news round"
                                              src="{{asset($post_similar->thumbnail)}}">
                                     </a>
                                 </div>
                                 <div class="box-content box-content2 col-12">
                                     <div class="d-none d-md-block">
-                                        <a href="#"><p class="p-title">{{$post_similar->title}}</p></a>
+                                        <a href="{{route('client.post', $post_similar->slug)}}"><p
+                                                class="p-title">{{$post_similar->title}}</p></a>
                                         <ul>
                                             <li><a href="{{route('client.category', $post_similar->category->slug)}}">
                                                     <p>{{$post_similar->category->name}}</p></a></li>
@@ -163,6 +165,7 @@
                 document.getElementById('btn_close_menu_md').style.display = 'none';
             }
         });
+
         //     set src for img
         const figures = document.querySelectorAll("figure img");
         figures.forEach(function (node) {
